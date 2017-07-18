@@ -1,0 +1,12 @@
+<?php
+
+/**
+ * Implements hook_schema().
+ */
+function uc_rec_schema() {
+  $schema = array();
+  $schema['uc_rec_purchase'] = drupal_get_schema_unprocessed('recommender', 'recommender_preference');
+  $schema['uc_rec_similarity'] = drupal_get_schema_unprocessed('recommender', 'recommender_item_similarity');
+  $schema['uc_rec_prediction'] = drupal_get_schema_unprocessed('recommender', 'recommender_prediction');
+  return $schema;
+}

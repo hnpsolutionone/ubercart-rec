@@ -1,0 +1,50 @@
+<?php
+
+/**
+ * @file
+ * The block for recommender system.
+ */
+
+/**
+ * Implements hook_block_info().
+ */
+function customize_block_info() {
+  $blocks['survey'] = array(
+    'info' => t('Survey'),
+    'cache' => DRUPAL_CACHE_PER_PAGE, //there are a number of caching options for this
+  );
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function customize_block_view($delta = '') {
+  $block = array();
+  switch ($delta) {
+    case 'survey':
+      $block['subject'] = t('');
+      $block['content'] = survey_blocks();
+      break;
+  }
+  return $block;
+}
+
+/**
+ * Function survey_blocks.
+ */
+function survey_blocks() {
+  return theme('survey');
+}
+
+/**
+ * Implements hook_theme().
+ * Here you are registering your default tpl for the above block
+ */
+function customize_theme() {
+  return array(
+    'survey' => array(
+      'template' => 'templates/survey'
+    ),
+  );
+}

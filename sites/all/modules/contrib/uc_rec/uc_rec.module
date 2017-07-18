@@ -1,0 +1,79 @@
+<?php
+
+
+/**
+ * Implements of hook_help().
+ */
+function uc_rec_help($path, $args) {
+  $output = '';
+  switch ($path) {
+    case "admin/help#uc_rec":
+      $output = '<p>'.  t("This module generates Ubercart products recommendations based on purchasing history") .'</p>';
+      break;
+  }
+  return $output;
+}
+
+
+/**
+ * Implements hook_views_api().
+ */
+function uc_rec_views_api() {
+  return array(
+    'api' => 3,
+  );
+}
+
+
+/**
+ * Implements hook_recommender_data().
+ */
+function uc_rec_recommender_data() {
+  return array(
+    'uc_rec_default' => array(
+      'title' => t('Ubercart Recommender'),
+      'description' => t('Generate product recommendations based on users purchasing history. See technical details in README.txt.'),
+      'algorithm' => 'item2item_boolean',
+      'data structure' => array(
+        'preference' => array(
+          'type' => 'table',
+          'name' => 'uc_rec_purchase',
+          'score type' => 'boolean',
+          'no views' => TRUE, // use Ubercart default views instead for purchasing history.
+        ),
+        'item similarity' => array(
+          'type' => 'table',
+          'name' => 'uc_rec_similarity',
+        ),
+        'prediction' => array(
+          'type' => 'table',
+          'name' => 'uc_rec_prediction',
+        ),
+        'item entity type' => 'node', // "products" are nodes.
+      ),
+      'cron callback' => 'uc_rec_cron_callback',
+      'upkeep callback' => 'uc_rec_upkeep_callback'
+    ),
+  );
+}
+
+
+function uc_rec_cron_callback($curr) {
+  $prev = variable_get('uc_rec_last_cron', 0);
+
+  $rows = db_query("SELECT o.uid, p.nid, MAX(o.modified) AS updated FROM {uc_order_products} p INNER JOIN {uc_orders} o ON p.order_id = o.order_id WHERE o.modified BETWEEN :prev AND :curr GROUP BY o.uid, p.nid", array(':prev' => $prev, ':curr' => $curr))->fetchAll();
+
+  foreach ($rows as $row) {
+    db_merge('uc_rec_purchase')->key(array('uid' => $row->uid, 'eid' => $row->nid))
+      ->insertFields(array('uid' => $row->uid, 'eid' => $row->nid, 'updated' => $row->updated))
+      ->updateFields(array('updated' => $row->updated))
+      ->execute();
+  }
+
+  variable_set('uc_rec_last_cron', $curr);
+}
+
+
+function uc_rec_upkeep_callback($timestamp) {
+  // this is supposed to remove canceled order data, etc. not implemented yet.
+}

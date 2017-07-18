@@ -1,0 +1,6 @@
+name = 'Customize'
+description = Customize coding
+package = Development
+
+core = 7.x
+version = 0.1
