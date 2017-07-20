@@ -1,2 +1,2 @@
-# easyrec-drupal7
-Create recommender system for ubercart with easyrec and drupal 7
+# Recommemder system
+A recommender system with ubercart and drupal7
