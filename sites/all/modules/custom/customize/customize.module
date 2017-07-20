@@ -53,6 +53,7 @@ function customize_theme() {
  * Implements hook_cron().
  * Here you are added computing application and run recommender after that
  */
+/*
 function customize_cron() {
     // Add 3 recommenders application
     $recommenders = array();
@@ -211,3 +212,4 @@ function customize_cron() {
     };
     drupal_set_message("Processed $count recommender tasks.", "status");
 }
+*/
