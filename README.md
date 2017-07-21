@@ -1,8 +1,15 @@
 # Recommemder system
-A recommender system with ubercart and drupal7
+A recommender system integrated with ubercart and drupal7
 
-Note: Please create cron job to execute some tasks below for recommender system
+After installation (import database and config the setting.php file to connect to database), follow these steps to compute recommendations:
 
-*/15 * * * * drush recommender-cron // 1. Run Drupal Cron to feed product purchase history into recommender. (Navigation to http://localhost/ubercart_rec/admin/config/system/computing/recommender and chose "Separately with Drush" option)
-*/20 * * * * drush customize-call // 2. Run Drupal Cron to add a computing command.
-*/25 * * * * drush recommender-run // 3. Run Drupal Cron to compute recommendations using
+1. Create cron job and add some drush command line to compute recommendations
+
+// 1. Run Drush command line to feed product purchase history into recommender. (Navigation to http://localhost/ubercart_rec/admin/config/system/computing/recommender and chose "Separately with Drush" option)
+*/15 * * * * drush recommender-cron
+
+// 2. Run Drush command line to add a computing command.
+*/20 * * * * drush customize-call
+
+// 3. Run Drush command line to compute recommendations using
+*/25 * * * * drush recommender-run
