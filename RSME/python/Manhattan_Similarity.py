@@ -157,8 +157,8 @@ r_cols = ['user_id', 'movie_id', 'rating', 'unix_timestamp']
 ratings_base = pd.read_csv('ml-100k/ub.base', sep='\t', names=r_cols, encoding='latin-1')
 ratings_test = pd.read_csv('ml-100k/ub.test', sep='\t', names=r_cols, encoding='latin-1')
 
-rate_train = ratings_base.as_matrix()
-rate_test = ratings_test.as_matrix()
+rate_train = ratings_base.values
+rate_test = ratings_test.values
 
 # indices start from 0
 rate_train[:, :2] -= 1
@@ -174,4 +174,4 @@ for n in range(n_tests):
     SE += (pred - rate_test[n, 2])**2 
 
 RMSE = np.sqrt(SE/n_tests)
-print ('Euclidean Recommender, RMSE =', RMSE)
+print ('Manhattan Recommender, RMSE =', RMSE)
